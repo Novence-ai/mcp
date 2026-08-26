@@ -1,0 +1,17 @@
+{
+  "name": "novence",
+  "description": "Static site hosting for AI agents — create projects, upload HTML/CSS/JS, run quality checks, deploy to the edge.",
+  "owner": {
+    "name": "Novence",
+    "email": "support@novence.ai",
+    "url": "https://novence.ai"
+  },
+  "plugins": [
+    {
+      "name": "novence",
+      "source": "./",
+      "description": "Hosted MCP for creating, checking, deploying, and hosting static sites.",
+      "version": "0.1.1"
+    }
+  ]
+}

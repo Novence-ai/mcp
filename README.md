@@ -1,0 +1,91 @@
+# Novence MCP
+
+Hosted [Model Context Protocol](https://modelcontextprotocol.io) server for **Novence** — static site hosting for AI agents.
+
+- **Endpoint:** `https://api.novence.ai/mcp` (streamable HTTP)
+- **Auth:** `Authorization: Bearer nv_…`
+- **Docs:** [novence.ai/mcp](https://novence.ai/mcp)
+- **Privacy:** [novence.ai/privacy](https://novence.ai/privacy)
+
+This repository is the **Claude Code plugin / install package** ([Novence-ai/mcp](https://github.com/Novence-ai/mcp)). The MCP server itself is hosted; there is nothing to run locally.
+
+## Get an API key
+
+```bash
+curl -sS -X POST https://api.novence.ai/v1/bootstrap \
+  -H 'Content-Type: application/json' \
+  -d '{"email":"you@example.com"}'
+```
+
+Verify the emailed OTP when prompted to unlock full Free quotas.
+
+## Install (Claude Code)
+
+```bash
+claude plugin marketplace add Novence-ai/mcp
+# or: enable from the Claude plugin directory after listing is approved
+```
+
+Then set **Novence API key** in plugin settings (Keychain). See [SETUP.md](./SETUP.md). Run `/reload-plugins` if you filled the key after enabling.
+
+Claude stores the key via **plugin `userConfig`** — prefer this over shell env. The plugin’s `.mcp.json` sends `Authorization: Bearer ${user_config.api_key}`.
+
+## Cursor / shell
+
+```bash
+export NOVENCE_API_KEY='nv_…'
+```
+
+Add to `~/.cursor/mcp.json` (or project `.cursor/mcp.json`):
+
+```json
+{
+  "mcpServers": {
+    "novence": {
+      "url": "https://api.novence.ai/mcp",
+      "headers": {
+        "Authorization": "Bearer ${env:NOVENCE_API_KEY}"
+      }
+    }
+  }
+}
+```
+
+One-click install: [Add to Cursor](https://novence.ai/mcp#connect)
+
+## Generic MCP clients
+
+```json
+{
+  "mcpServers": {
+    "novence": {
+      "url": "https://api.novence.ai/mcp",
+      "headers": {
+        "Authorization": "Bearer nv_…"
+      }
+    }
+  }
+}
+```
+
+## Tools
+
+| Tool | Description |
+| --- | --- |
+| `create_project` / `list_projects` / `get_project` / `update_project_settings` | Project lifecycle |
+| `get_upload_url` / `get_upload_urls_batch` / `confirm_upload` / `confirm_uploads_batch` | Upload site files |
+| `list_files` / `get_file` / `delete_file` | Manage project files |
+| `deploy` / `get_deployment_status` / `get_preview_url` | Publish and poll until live |
+| `run_checks` / `get_checks_results` | Quality checks (Lighthouse, a11y, links) |
+| `configure_custom_domain` / `get_domain_status` | Custom domains |
+| `create_form` / `list_forms` / `update_form` / `list_form_submissions` / `delete_form_submission` | Forms |
+| `get_quotas_and_usage` / `get_project_usage` / `update_project_settings` (`analytics_enabled`) / `get_project_analytics` / `get_account` | Quotas, usage, and opt-in site traffic |
+| `create_account_session` / `get_account_console_kit` | Billing/account console kit (never embed `nv_` in HTML) |
+
+## Official registry
+
+Published as `ai.novence/mcp` on [registry.modelcontextprotocol.io](https://registry.modelcontextprotocol.io).
+
+## License
+
+MIT — see [LICENSE](./LICENSE).
