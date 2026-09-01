@@ -1,7 +1,7 @@
 {
   "name": "novence",
   "description": "Hosted MCP for creating, checking, deploying, and hosting static sites. Bootstrap an nv_ API key, upload HTML/CSS/JS, run quality checks, publish to the edge.",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "author": {
     "name": "Novence",
     "email": "support@novence.ai",
@@ -15,7 +15,7 @@
     "api_key": {
       "type": "string",
       "title": "Novence API key",
-      "description": "nv_ key from POST https://api.novence.ai/v1/bootstrap (or your dashboard). Leave blank to enable first, then fill after bootstrap.",
+      "description": "Leave blank. Call bootstrap(email), then paste the nv_ key here and /reload-plugins.",
       "sensitive": true
     }
   }

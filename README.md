@@ -3,21 +3,11 @@
 Hosted [Model Context Protocol](https://modelcontextprotocol.io) server for **Novence** — static site hosting for AI agents.
 
 - **Endpoint:** `https://api.novence.ai/mcp` (streamable HTTP)
-- **Auth:** `Authorization: Bearer nv_…`
+- **Auth:** optional to start. Call `bootstrap(email)`; the session adopts the `nv_` key. Then `Authorization: Bearer nv_…` for later sessions.
 - **Docs:** [novence.ai/mcp](https://novence.ai/mcp)
 - **Privacy:** [novence.ai/privacy](https://novence.ai/privacy)
 
 This repository is the **Claude Code plugin / install package** ([Novence-ai/mcp](https://github.com/Novence-ai/mcp)). The MCP server itself is hosted; there is nothing to run locally.
-
-## Get an API key
-
-```bash
-curl -sS -X POST https://api.novence.ai/v1/bootstrap \
-  -H 'Content-Type: application/json' \
-  -d '{"email":"you@example.com"}'
-```
-
-Verify the emailed OTP when prompted to unlock full Free quotas.
 
 ## Install (Claude Code)
 
@@ -26,17 +16,29 @@ claude plugin marketplace add Novence-ai/mcp
 # or: enable from the Claude plugin directory after listing is approved
 ```
 
-Then set **Novence API key** in plugin settings (Keychain). See [SETUP.md](./SETUP.md). Run `/reload-plugins` if you filled the key after enabling.
+Leave **Novence API key** blank. Call `bootstrap(email)` (MCP). After the live URL, paste the `nv_` key in plugin settings (Keychain) and run `/reload-plugins` so later sessions stay authenticated.
 
-Claude stores the key via **plugin `userConfig`** — prefer this over shell env. The plugin’s `.mcp.json` sends `Authorization: Bearer ${user_config.api_key}`.
+Claude stores the key via **plugin `userConfig`**. Empty interpolation is treated as unauthenticated (`Bearer ` / uninterpolated `${user_config.api_key}`), so bootstrap works before you fill the field.
 
 ## Cursor / shell
+
+Connect with no header, then bootstrap:
+
+```json
+{
+  "mcpServers": {
+    "novence": {
+      "url": "https://api.novence.ai/mcp"
+    }
+  }
+}
+```
+
+After `bootstrap`, persist the key:
 
 ```bash
 export NOVENCE_API_KEY='nv_…'
 ```
-
-Add to `~/.cursor/mcp.json` (or project `.cursor/mcp.json`):
 
 ```json
 {
@@ -51,27 +53,28 @@ Add to `~/.cursor/mcp.json` (or project `.cursor/mcp.json`):
 }
 ```
 
-One-click install: [Add to Cursor](https://novence.ai/mcp#connect)
+One-click install (no key): [Add to Cursor](https://novence.ai/mcp#connect)
 
 ## Generic MCP clients
 
-```json
-{
-  "mcpServers": {
-    "novence": {
-      "url": "https://api.novence.ai/mcp",
-      "headers": {
-        "Authorization": "Bearer nv_…"
-      }
-    }
-  }
-}
+Same as Cursor: URL only first, then add `Authorization: Bearer nv_…` after bootstrap.
+
+REST fallback if you are not on MCP:
+
+```bash
+# Deploy first (no email): curl -sS -X POST https://api.novence.ai/v1/demo
+curl -sS -X POST https://api.novence.ai/v1/bootstrap \
+  -H 'Content-Type: application/json' \
+  -d '{"email":"you@example.com"}'
 ```
+
+Verify the emailed OTP after the live URL to unlock full Free quotas.
 
 ## Tools
 
 | Tool | Description |
 | --- | --- |
+| `bootstrap` / `verify_email` / `resend_verification` / `reissue_key` | Signup without a prior `nv_` key; OTP after live URL |
 | `create_project` / `list_projects` / `get_project` / `update_project_settings` | Project lifecycle |
 | `get_upload_url` / `get_upload_urls_batch` / `confirm_upload` / `confirm_uploads_batch` | Upload site files |
 | `list_files` / `get_file` / `delete_file` | Manage project files |
@@ -79,6 +82,7 @@ One-click install: [Add to Cursor](https://novence.ai/mcp#connect)
 | `run_checks` / `get_checks_results` | Quality checks (Lighthouse, a11y, links) |
 | `configure_custom_domain` / `get_domain_status` | Custom domains |
 | `create_form` / `list_forms` / `update_form` / `list_form_submissions` / `delete_form_submission` | Forms |
+| `checkout` / `mpp_upgrade` / `billing_portal` | Paid plans (verified email; after 2nd project or a 402) |
 | `get_quotas_and_usage` / `get_project_usage` / `update_project_settings` (`analytics_enabled`) / `get_project_analytics` / `get_account` | Quotas, usage, and opt-in site traffic |
 | `create_account_session` / `get_account_console_kit` | Billing/account console kit (never embed `nv_` in HTML) |
 

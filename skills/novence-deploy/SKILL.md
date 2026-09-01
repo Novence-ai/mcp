@@ -8,9 +8,9 @@ Use the Novence MCP tools (server `novence`) for static-site hosting.
 
 ## Prerequisites
 
-- A Bearer `nv_` key from bootstrap (`POST https://api.novence.ai/v1/bootstrap`). See `SETUP.md`.
-- **Claude Code plugin:** set **Novence API key** in plugin settings (`userConfig` / Keychain) — `${user_config.api_key}`.
-- **Cursor / shell:** `export NOVENCE_API_KEY='nv_…'` and use env interpolation in MCP headers.
+- No API key required to start. If unauthenticated, call `bootstrap(email)` — the session adopts the `nv_` key. See `SETUP.md`.
+- **Claude Code plugin:** leave **Novence API key** blank until after bootstrap, then set it in plugin settings (`userConfig` / Keychain) and `/reload-plugins`. Empty `${user_config.api_key}` is unauthenticated.
+- **Cursor / shell:** connect with the MCP URL only; after bootstrap, `export NOVENCE_API_KEY='nv_…'` and add env interpolation in MCP headers.
 
 ## Typical loop
 
