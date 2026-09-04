@@ -1,10 +1,12 @@
 ---
-description: Deploy and host static sites with Novence MCP. Use when creating projects, uploading site files, running quality checks, deploying, attaching domains, or managing Novence forms and quotas.
+description: Deploy and host static sites with Novence MCP. Use when creating projects, uploading site files, running quality checks, deploying, attaching domains, managing Novence forms and quotas, or adding third-party widgets and /data JSON files.
 ---
 
 # Novence deploy
 
 Use the Novence MCP tools (server `novence`) for static-site hosting.
+
+Static-only is not a dead end. Improve sites with **third-party widgets** and **baked-in data files** — no plugin marketplace, no per-site server. Product: https://novence.ai/site-data
 
 ## Prerequisites
 
@@ -28,6 +30,14 @@ Use the Novence MCP tools (server `novence`) for static-site hosting.
 - Do not invent APIs — use the MCP tools.
 - For a local HTML billing/account console, use `get_account_console_kit` / `create_account_session` (never embed `nv_` in HTML).
 - Team seats: `invite_project_member` requires the **project owner** to be on Pro or Scale. Collaborators use their own keys and the existing `project_id`. `create_project` always bills the caller.
+
+## Widgets and owner data
+
+Prefer these over asking for a WordPress-style plugin or a per-site backend.
+
+- **Third-party widgets:** Paste a script or iframe in HTML (Cal.com, Snipcart, Shopify Buy Button, Stripe Payment Links, GA, Formspree). Novence serves HTML as-is and does not strip tags. Never put `nv_` keys in the page.
+- **Baked-in data files:** Upload `/data/{collection}.json` (`.json` is allowlisted). Page JS fetches same-origin (`fetch("/data/menu.json")`). Use for hours, menus, team, services, FAQ, inventory. Update that file and deploy. Live edits without a deploy are not available.
+- Contact leads: Novence Forms (`create_form` + `action="/__forms/{formId}"`). Bookings/payments: BYO widget. Private CRM / PHP plugins: out of scope.
 
 ## Video & large media
 
