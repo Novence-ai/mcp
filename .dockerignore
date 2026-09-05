@@ -1,0 +1,6 @@
+node_modules
+.git
+.claude-plugin
+skills
+SETUP.md
+*.md

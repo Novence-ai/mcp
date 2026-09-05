@@ -9,6 +9,8 @@ Hosted [Model Context Protocol](https://modelcontextprotocol.io) server for **No
 
 This repository is the **Claude Code plugin / install package** ([Novence-ai/mcp](https://github.com/Novence-ai/mcp)). The MCP server itself is hosted; there is nothing to run locally.
 
+The `Dockerfile` and `catalog/` stdio adapter are **only** for MCP directories (Glama). They answer `tools/list` with public tool schemas. They do not contain the hosting API. End users should use `https://api.novence.ai/mcp`.
+
 ## Install (Claude Code)
 
 ```bash
@@ -89,6 +91,18 @@ Verify the emailed OTP after the live URL to unlock full Free quotas.
 ## Official registry
 
 Published as `ai.novence/mcp` on [registry.modelcontextprotocol.io](https://registry.modelcontextprotocol.io).
+
+## Directories / Glama
+
+Do not run this image as a substitute for the hosted MCP. After a Glama maintainer deploys it:
+
+1. Open https://glama.ai/mcp/servers/Novence-ai/mcp/admin/dockerfile
+2. Deploy, then **Make Release**
+
+```bash
+npm ci
+npm run catalog:smoke
+```
 
 ## License
 

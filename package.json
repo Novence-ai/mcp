@@ -1,0 +1,18 @@
+{
+  "name": "@novence/mcp-plugin",
+  "version": "0.1.3",
+  "private": true,
+  "description": "Claude Code plugin for hosted Novence MCP. Catalog stdio adapter is for directory introspection only.",
+  "license": "MIT",
+  "type": "module",
+  "engines": {
+    "node": ">=18"
+  },
+  "scripts": {
+    "catalog": "node catalog/stdio.mjs",
+    "catalog:smoke": "node catalog/smoke.mjs"
+  },
+  "dependencies": {
+    "@modelcontextprotocol/sdk": "^1.12.0"
+  }
+}
