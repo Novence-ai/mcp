@@ -420,6 +420,35 @@ export const tools = [
     },
   },
   {
+    name: "publish_html",
+    title: "Publish HTML",
+    description:
+      "Publish one HTML document (report, dashboard, Claude-style artifact) as index.html and deploy. Omit project_id to create a project. Hosted MCP cannot read local files — pass the HTML string (read the file first). Returns url, project_id, and deployment. Poll get_deployment_status until live or failed. For multi-file sites use the upload + deploy loop instead. Re-call with the same project_id to replace the live page.",
+    annotations: writeWorld,
+    inputSchema: {
+      type: "object",
+      properties: {
+        html: {
+          type: "string",
+          description:
+            "Full HTML document to publish as /index.html. If you have a local file, read it and pass the contents here.",
+        },
+        title: {
+          type: "string",
+          description:
+            "Project display name when creating a project. Optional; defaults to artifact.",
+        },
+        project_id: projectId("from create_project, list_projects, or a previous publish_html"),
+        force: {
+          type: "boolean",
+          description:
+            "If true, publish even when quality checks would block. Optional; default false.",
+        },
+      },
+      required: ["html"],
+    },
+  },
+  {
     name: "deploy",
     title: "Deploy site",
     description:

@@ -1,5 +1,5 @@
 ---
-description: Deploy and host static sites with Novence MCP. Use when creating projects, uploading site files, running quality checks, deploying, attaching domains, managing Novence forms and quotas, or adding third-party widgets and /data JSON files.
+description: Deploy and host static sites and HTML artifacts with Novence MCP. Use when creating projects, publishing a single HTML report/dashboard/artifact, uploading site files, running quality checks, deploying, attaching domains, managing Novence forms and quotas, or adding third-party widgets and /data JSON files.
 ---
 
 # Novence deploy
@@ -14,15 +14,26 @@ Static-only is not a dead end. Improve sites with **third-party widgets** and **
 - **Claude Code plugin:** leave **Novence API key** blank until after bootstrap, then set it in plugin settings (`userConfig` / Keychain) and `/reload-plugins`. Empty `${user_config.api_key}` is unauthenticated.
 - **Cursor / shell:** connect with the MCP URL only; after bootstrap, `export NOVENCE_API_KEY='nv_…'` and add env interpolation in MCP headers.
 
-## Typical loop
+## One HTML file (artifact)
+
+When the user has a **single HTML document** (report, dashboard, deck, Claude-style artifact) and needs a live URL:
+
+1. If unauthenticated, `bootstrap(email)`.
+2. Read the file if it is on disk, then call `publish_html` with the HTML string. Omit `project_id` to create a project; pass it to replace the live page.
+3. Poll `get_deployment_status` until live or failed.
+4. Return only the `url` (`https://{suffix}.novence.ai/`).
+
+Do **not** use the multi-file upload loop for one HTML file. Shell: `npx novence deploy report.html`.
+
+## Typical loop (multi-file sites)
 
 1. `create_project` with a name.
 2. `get_upload_urls_batch` for site paths, PUT file bodies to the presigned URLs.
 3. `confirm_uploads_batch`.
 4. `deploy` (optionally `force`).
 5. Poll `get_deployment_status` / `get_checks_results` until published.
-6. `get_preview_url` for the live URL (`https://{suffix}.novence.ai`).
-7. Optional: `configure_custom_domain`, `create_form`, `get_quotas_and_usage`, `update_project_settings` (`analytics_enabled: true`) then `get_project_analytics`, `invite_project_member` (Pro/Scale owner).
+6. `get_preview_url` — live host on Free; per-deploy `https://{suffix}--{ref}.novence.ai` alias on Pro/Scale.
+7. Optional: `rollback` (Pro/Scale, last 5 successful deploys), `configure_custom_domain`, `create_form`, `get_quotas_and_usage`, `update_project_settings` (`analytics_enabled: true`) then `get_project_analytics`, `invite_project_member` (Pro/Scale owner).
 
 ## Rules
 
