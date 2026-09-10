@@ -420,6 +420,24 @@ export const tools = [
     },
   },
   {
+    name: "set_redirects",
+    title: "Set redirects",
+    description:
+      "Write /_redirects (Netlify subset) into staging. Call deploy afterwards to publish. SPA History routing: /*    /index.html   200. Exact files always win. Optional custom 404 is a separate /404.html upload. Does not write the live prefix.",
+    annotations: write,
+    inputSchema: {
+      type: "object",
+      properties: {
+        project_id: projectId(),
+        body: {
+          type: "string",
+          description: "Contents of /_redirects. Example: /*    /index.html   200",
+        },
+      },
+      required: ["project_id", "body"],
+    },
+  },
+  {
     name: "publish_html",
     title: "Publish HTML",
     description:

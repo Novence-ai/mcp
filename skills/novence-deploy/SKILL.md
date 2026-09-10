@@ -33,7 +33,7 @@ Do **not** use the multi-file upload loop for one HTML file. Shell: `npx novence
 4. `deploy` (optionally `force`).
 5. Poll `get_deployment_status` / `get_checks_results` until published.
 6. `get_preview_url` — live host on Free; per-deploy `https://{suffix}--{ref}.novence.ai` alias on Pro/Scale.
-7. Optional: `rollback` (Pro/Scale, last 5 successful deploys), `configure_custom_domain`, `create_form`, `get_quotas_and_usage`, `update_project_settings` (`analytics_enabled: true`) then `get_project_analytics`, `invite_project_member` (Pro/Scale owner).
+7. Optional: `set_redirects` with `/*    /index.html   200` for History-API SPAs (then `deploy`), `rollback` (Pro/Scale, last 5 successful deploys), `configure_custom_domain`, `create_form`, `get_quotas_and_usage`, `update_project_settings` (`analytics_enabled: true`) then `get_project_analytics`, `invite_project_member` (Pro/Scale owner). Upload `/404.html` for a custom 404 page.
 
 ## Rules
 
