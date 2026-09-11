@@ -2,6 +2,16 @@
 
 Hosted [Model Context Protocol](https://modelcontextprotocol.io) server for **Novence** — static site hosting for AI agents.
 
+Your agent can build the site. Then in seconds, give it somewhere to ship.
+
+<p align="center">
+  <a href="assets/novence-install-20s.mp4">
+    <img src="assets/novence-install.webp" alt="Add Novence MCP — Claude or Cursor calls create_project, uploads, deploys, and lands on a live URL" width="800" />
+  </a>
+  <br />
+  <sub>20 seconds · Claude Code, Cursor, Codex, or any other agent · plugin to a live URL</sub>
+</p>
+
 - **Endpoint:** `https://api.novence.ai/mcp` (streamable HTTP)
 - **Auth:** optional to start. Call `bootstrap(email)`; the session adopts the `nv_` key. Then `Authorization: Bearer nv_…` for later sessions.
 - **Docs:** [novence.ai/mcp](https://novence.ai/mcp)
@@ -93,18 +103,6 @@ Verify the emailed OTP after the live URL to unlock full Free quotas.
 ## Official registry
 
 Published as `ai.novence/mcp` on [registry.modelcontextprotocol.io](https://registry.modelcontextprotocol.io).
-
-## Directories / Glama
-
-Do not run this image as a substitute for the hosted MCP. After a Glama maintainer deploys it:
-
-1. Open https://glama.ai/mcp/servers/Novence-ai/mcp/admin/dockerfile
-2. Deploy, then **Make Release**
-
-```bash
-npm ci
-npm run catalog:smoke
-```
 
 ## License
 
