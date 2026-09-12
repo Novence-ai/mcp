@@ -267,7 +267,7 @@ export const tools = [
     name: "update_project_settings",
     title: "Update project settings",
     description:
-      "Update project name, description, check thresholds, or analyticsEnabled (cookieless edge traffic; off by default).",
+      "Update project name, description, check thresholds, analyticsEnabled (cookieless edge traffic; off by default), or shareGateEmails (optional OTP gate on platform hosts only; empty = public).",
     annotations: write,
     inputSchema: {
       type: "object",
@@ -288,6 +288,13 @@ export const tools = [
           type: "boolean",
           description:
             "Enable cookieless edge analytics. Required true before get_project_analytics returns totals.",
+        },
+        share_gate_emails: {
+          type: "array",
+          maxItems: 5,
+          items: { type: "string" },
+          description:
+            "Up to 5 client emails. Non-empty turns on email OTP on *.novence.ai and /p/{suffix}/ only. Custom domains stay public. Empty array turns the gate off. Saving the list does not send mail.",
         },
       },
       required: ["project_id"],
