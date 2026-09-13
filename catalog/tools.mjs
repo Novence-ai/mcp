@@ -550,7 +550,7 @@ export const tools = [
     name: "configure_custom_domain",
     title: "Configure custom domain",
     description:
-      "Attach a custom domain. For site domains, enables apex+www. Default primary=www with redirect (Vercel-style). Pass primary=apex or redirect=false to change.",
+      "Attach a custom domain. For site domains, enables apex+www. Default primary=www. Required DNS: CNAME www → fallback.novence.ai. Then do exactly one apex option: ALIAS/ANAME/CNAME-flattening @ → fallback.novence.ai, or registrar URL-redirect @ → https://www.{domain}/. Pass primary=apex only when the apex must serve (ALIAS required; URL-redirect would loop).",
     annotations: writeWorld,
     inputSchema: {
       type: "object",
@@ -578,7 +578,7 @@ export const tools = [
     name: "get_domain_status",
     title: "Get domain status",
     description:
-      "Read DNS and TLS status for the project's custom hostname after configure_custom_domain. Do not use this to attach a domain. Poll until verified; returns current hostname and certificate state. Read-only.",
+      "Read DNS for the project's custom hostname after configure_custom_domain. Returns dns.www, dns.apex, and dns.next (a single next DNS step, or null when www CNAME is in place and apex has records). customDomainStatus stays pending after attach — poll dns.next until null. Do not use this to attach a domain. Read-only.",
     annotations: read,
     inputSchema: {
       type: "object",

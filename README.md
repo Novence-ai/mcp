@@ -94,7 +94,7 @@ Verify the emailed OTP after the live URL to unlock full Free quotas.
 | `deploy` / `get_deployment_status` / `get_preview_url` / `rollback` | Publish, poll, preview aliases (Pro/Scale), rollback last 5 |
 | `publish_html` | One HTML document → `index.html` + deploy (omit project_id to create) |
 | `run_checks` / `get_checks_results` | Quality checks (Lighthouse, a11y, links) |
-| `configure_custom_domain` / `get_domain_status` | Custom domains |
+| `configure_custom_domain` / `get_domain_status` | Custom domains (CNAME www → fallback.novence.ai; apex ALIAS **or** URL-redirect) |
 | `create_form` / `list_forms` / `update_form` / `list_form_submissions` / `delete_form_submission` | Forms |
 | `checkout` / `mpp_upgrade` / `billing_portal` | Paid plans (verified email; after 2nd project or a 402) |
 | `get_quotas_and_usage` / `get_project_usage` / `update_project_settings` (`analytics_enabled`) / `get_project_analytics` / `get_account` | Quotas, usage, and opt-in site traffic |
