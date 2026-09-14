@@ -33,7 +33,7 @@ Do **not** use the multi-file upload loop for one HTML file. Shell: `npx novence
 4. `deploy` (optionally `force`).
 5. Poll `get_deployment_status` / `get_checks_results` until published.
 6. `get_preview_url` — live host on Free; per-deploy `https://{suffix}--{ref}.novence.ai` alias on Pro/Scale.
-7. Optional: `set_redirects` with `/*    /index.html   200` for History-API SPAs (then `deploy`), `rollback` (Pro/Scale, last 5 successful deploys), `configure_custom_domain` (CNAME `www` → `fallback.novence.ai`, then one apex option: ALIAS `@` → `fallback.novence.ai` **or** registrar URL-redirect to www), `create_form`, `get_quotas_and_usage`, `update_project_settings` (`analytics_enabled: true`) then `get_project_analytics`, `update_project_settings` (`share_gate_emails`) for optional email OTP on `*.novence.ai` only (custom domains stay public), `invite_project_member` (Pro/Scale owner). Upload `/404.html` for a custom 404 page.
+7. Optional: `set_redirects` with `/*    /index.html   200` for History-API SPAs (then `deploy`), `rollback` (Pro/Scale, last 5 successful deploys), `put_site_data` (Pro/Scale live `/data/{name}.json` without a deploy), `configure_custom_domain` (CNAME `www` → `fallback.novence.ai`, then one apex option: ALIAS `@` → `fallback.novence.ai` **or** registrar URL-redirect to www), `create_form`, `get_quotas_and_usage`, `update_project_settings` (`analytics_enabled: true`) then `get_project_analytics`, `update_project_settings` (`share_gate_emails`) for optional email OTP on `*.novence.ai` only (custom domains stay public), `invite_project_member` (Pro/Scale owner). Upload `/404.html` for a custom 404 page.
 
 ## Rules
 
@@ -47,7 +47,7 @@ Do **not** use the multi-file upload loop for one HTML file. Shell: `npx novence
 Prefer these over asking for a WordPress-style plugin or a per-site backend.
 
 - **Third-party widgets:** Paste a script or iframe in HTML (Cal.com, Snipcart, Shopify Buy Button, Stripe Payment Links, GA, Formspree). Novence serves HTML as-is and does not strip tags. Never put `nv_` keys in the page.
-- **Baked-in data files:** Upload `/data/{collection}.json` (`.json` is allowlisted). Page JS fetches same-origin (`fetch("/data/menu.json")`). Use for hours, menus, team, services, FAQ, inventory. Update that file and deploy. Live edits without a deploy are not available.
+- **Baked-in data files:** Upload `/data/{collection}.json` (`.json` is allowlisted). Page JS fetches same-origin (`fetch("/data/menu.json")`). Use for hours, menus, team, services, FAQ, inventory. Free: update that file and `deploy`. Pro/Scale: `put_site_data` writes it live without a deploy (keep the file in the project). Do not store secrets — the URL is public.
 - Contact leads: Novence Forms (`create_form` + `action="/__forms/{formId}"`). Bookings/payments: BYO widget. Private CRM / PHP plugins: out of scope.
 
 ## Video & large media

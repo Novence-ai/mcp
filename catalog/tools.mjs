@@ -445,6 +445,28 @@ export const tools = [
     },
   },
   {
+    name: "put_site_data",
+    title: "Put live site JSON",
+    description:
+      "Write /data/{name}.json on the live site without a deploy (Pro/Scale). Page JS keeps fetch(\"/data/{name}.json\"). JSON must be an object or array, max 256 KB. Include the file in the next deploy or a repo upload that omits it can wipe it. Do not store secrets — the URL is public. Free: upload the JSON and call deploy instead.",
+    annotations: write,
+    inputSchema: {
+      type: "object",
+      properties: {
+        project_id: projectId(),
+        name: {
+          type: "string",
+          description:
+            "Collection name only (e.g. menu). Becomes /data/menu.json. Letters, digits, _ or -.",
+        },
+        json: {
+          description: "JSON object/array, or a JSON string of the same.",
+        },
+      },
+      required: ["project_id", "name", "json"],
+    },
+  },
+  {
     name: "publish_html",
     title: "Publish HTML",
     description:
