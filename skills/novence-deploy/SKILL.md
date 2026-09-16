@@ -13,6 +13,7 @@ Static-only is not a dead end. Improve sites with **third-party widgets** and **
 ## Prerequisites
 
 - No API key required to start. If unauthenticated, call `bootstrap(email)` — the session adopts the `nv_` key. See `SETUP.md`.
+- After `bootstrap(email)`, keep the same MCP session — do **not** disconnect/reconnect to pick up the `nv_` key. Persist the key only for *later* sessions (Claude: plugin Keychain + `/reload-plugins`; Cursor/shell: `NOVENCE_API_KEY` + Bearer header).
 - **Claude Code plugin:** leave **Novence API key** blank until after bootstrap, then set it in plugin settings (`userConfig` / Keychain) and `/reload-plugins`. Empty `${user_config.api_key}` is unauthenticated.
 - **Cursor / shell:** connect with the MCP URL only; after bootstrap, `export NOVENCE_API_KEY='nv_…'` and add env interpolation in MCP headers.
 
@@ -40,6 +41,8 @@ Do **not** use the multi-file upload loop for one HTML file. Shell: `npx novence
 ## Rules
 
 - Prefer batch upload tools for multi-file sites.
+- When a shell is available and the site (or a single HTML file) is on disk, prefer `npx novence deploy ./dist` (or `npx novence deploy report.html`) over the multi-file MCP upload loop. Use MCP when there is no shell, or for project/domain/forms/quotas/billing after deploy.
+- Paid plans: subscribe with `checkout` or `mpp_upgrade` after a verified email (typically at a 2nd project or a 402). `billing_portal` is manage-only after already on Pro/Scale — never for first subscribe.
 - Do not invent APIs — use the MCP tools.
 - For a local HTML billing/account console, use `get_account_console_kit` / `create_account_session` (never embed `nv_` in HTML).
 - Team seats: `invite_project_member` requires the **project owner** to be on Pro or Scale. Collaborators use their own keys and the existing `project_id`. `create_project` always bills the caller.
