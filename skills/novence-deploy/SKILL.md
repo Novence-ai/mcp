@@ -1,6 +1,7 @@
 ---
 name: novence-deploy
 description: Deploy and host static sites and HTML artifacts with Novence MCP. Use when creating projects, publishing a single HTML report/dashboard/artifact, uploading site files, running quality checks, deploying, attaching domains, managing Novence forms and quotas, or adding third-party widgets and /data JSON files.
+license: MIT
 ---
 
 # Novence deploy
