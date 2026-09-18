@@ -1,7 +1,11 @@
 {
   "mcpServers": {
     "novence": {
-      "url": "https://api.novence.ai/mcp"
+      "type": "http",
+      "url": "https://api.novence.ai/mcp",
+      "headers": {
+        "Authorization": "Bearer ${user_config.api_key}"
+      }
     }
   }
 }

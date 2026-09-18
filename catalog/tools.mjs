@@ -267,7 +267,7 @@ export const tools = [
     name: "update_project_settings",
     title: "Update project settings",
     description:
-      "Update project name, description, check thresholds, analyticsEnabled (cookieless edge traffic; off by default), or shareGateEmails (optional OTP gate on platform hosts only; empty = public).",
+      "Update project name, description, check thresholds, analyticsEnabled (cookieless edge traffic; off by default), shareGateEmails (optional OTP gate on platform hosts only; empty = public), or siteMcp (off | read | forms visitor MCP on Pro/Scale; cannot combine with the share gate).",
     annotations: write,
     inputSchema: {
       type: "object",
@@ -295,6 +295,12 @@ export const tools = [
           items: { type: "string" },
           description:
             "Up to 5 client emails. Non-empty turns on email OTP on *.novence.ai and /p/{suffix}/ only. Custom domains stay public. Empty array turns the gate off. Saving the list does not send mail.",
+        },
+        site_mcp: {
+          type: "string",
+          enum: ["off", "read", "forms"],
+          description:
+            "Visitor Site MCP. off (default), read (list_pages + get_site_data), or forms (also list_forms + submit_form). Pro/Scale. Cannot enable while share_gate_emails is set.",
         },
       },
       required: ["project_id"],

@@ -45,8 +45,6 @@ Then add `"Authorization": "Bearer ${env:NOVENCE_API_KEY}"` to the MCP config.
 
 ## Notes
 
-- Root `.mcp.json` / `mcp.json` are Cursor-safe (URL only). After bootstrap, use `NOVENCE_API_KEY` + Bearer header. Claude plugin auth stays in Keychain / `userConfig` via `.claude-plugin/plugin.json`.
-- Skill path for registries: `skills/novence-deploy` (`gh skill install Novence-ai/mcp novence-deploy` when available).
 - Never put `nv_` keys in HTML or commit them to git.
 - Docs: https://novence.ai/mcp
 - Privacy: https://novence.ai/privacy

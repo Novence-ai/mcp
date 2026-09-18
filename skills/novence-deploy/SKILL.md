@@ -1,7 +1,5 @@
 ---
-name: novence-deploy
 description: Deploy and host static sites and HTML artifacts with Novence MCP. Use when creating projects, publishing a single HTML report/dashboard/artifact, uploading site files, running quality checks, deploying, attaching domains, managing Novence forms and quotas, or adding third-party widgets and /data JSON files.
-license: MIT
 ---
 
 # Novence deploy
@@ -13,7 +11,6 @@ Static-only is not a dead end. Improve sites with **third-party widgets** and **
 ## Prerequisites
 
 - No API key required to start. If unauthenticated, call `bootstrap(email)` — the session adopts the `nv_` key. See `SETUP.md`.
-- After `bootstrap(email)`, keep the same MCP session — do **not** disconnect/reconnect to pick up the `nv_` key. Persist the key only for *later* sessions (Claude: plugin Keychain + `/reload-plugins`; Cursor/shell: `NOVENCE_API_KEY` + Bearer header).
 - **Claude Code plugin:** leave **Novence API key** blank until after bootstrap, then set it in plugin settings (`userConfig` / Keychain) and `/reload-plugins`. Empty `${user_config.api_key}` is unauthenticated.
 - **Cursor / shell:** connect with the MCP URL only; after bootstrap, `export NOVENCE_API_KEY='nv_…'` and add env interpolation in MCP headers.
 
@@ -36,13 +33,11 @@ Do **not** use the multi-file upload loop for one HTML file. Shell: `npx novence
 4. `deploy` (optionally `force`).
 5. Poll `get_deployment_status` / `get_checks_results` until published.
 6. `get_preview_url` — live host on Free; per-deploy `https://{suffix}--{ref}.novence.ai` alias on Pro/Scale.
-7. Optional: `set_redirects` with `/*    /index.html   200` for History-API SPAs (then `deploy`), `rollback` (Pro/Scale, last 5 successful deploys), `put_site_data` (Pro/Scale live `/data/{name}.json` without a deploy), `configure_custom_domain` (CNAME `www` → `fallback.novence.ai`, then one apex option: ALIAS `@` → `fallback.novence.ai` **or** registrar URL-redirect to www), `create_form`, `get_quotas_and_usage`, `update_project_settings` (`analytics_enabled: true`) then `get_project_analytics`, `update_project_settings` (`share_gate_emails`) for optional email OTP on `*.novence.ai` only (custom domains stay public), `invite_project_member` (Pro/Scale owner). Upload `/404.html` for a custom 404 page.
+7. Optional: `set_redirects` with `/*    /index.html   200` for History-API SPAs (then `deploy`), `rollback` (Pro/Scale, last 5 successful deploys), `put_site_data` (Pro/Scale live `/data/{name}.json` without a deploy), `configure_custom_domain` (CNAME `www` → `fallback.novence.ai`, then one apex option: ALIAS `@` → `fallback.novence.ai` **or** registrar URL-redirect to www), `create_form`, `get_quotas_and_usage`, `update_project_settings` (`analytics_enabled: true`) then `get_project_analytics`, `update_project_settings` (`share_gate_emails`) for optional email OTP on `*.novence.ai` only (custom domains stay public), `update_project_settings` (`site_mcp`: `read` or `forms`) for visitor Site MCP on the live origin (Pro/Scale, off by default; no nv_ key; cannot combine with the share gate), `invite_project_member` (Pro/Scale owner). Upload `/404.html` for a custom 404 page.
 
 ## Rules
 
 - Prefer batch upload tools for multi-file sites.
-- When a shell is available and the site (or a single HTML file) is on disk, prefer `npx novence deploy ./dist` (or `npx novence deploy report.html`) over the multi-file MCP upload loop. Use MCP when there is no shell, or for project/domain/forms/quotas/billing after deploy.
-- Paid plans: subscribe with `checkout` or `mpp_upgrade` after a verified email (typically at a 2nd project or a 402). `billing_portal` is manage-only after already on Pro/Scale — never for first subscribe.
 - Do not invent APIs — use the MCP tools.
 - For a local HTML billing/account console, use `get_account_console_kit` / `create_account_session` (never embed `nv_` in HTML).
 - Team seats: `invite_project_member` requires the **project owner** to be on Pro or Scale. Collaborators use their own keys and the existing `project_id`. `create_project` always bills the caller.

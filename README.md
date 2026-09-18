@@ -21,10 +21,6 @@ This repository is the **Claude Code plugin / install package** ([Novence-ai/mcp
 
 The `Dockerfile` and `catalog/` stdio adapter are **only** for MCP directories (Glama). They answer `tools/list` with public tool schemas. They do not contain the hosting API. End users should use `https://api.novence.ai/mcp`.
 
-Root `.mcp.json` (and `mcp.json` for Cursor / Agent Plugins) is **Cursor-safe**: URL only, no Claude `${user_config.*}` placeholders. After bootstrap, Cursor / shell clients persist auth with env `NOVENCE_API_KEY` and a Bearer header. The Claude Code plugin keeps Keychain / `userConfig.api_key` via `.claude-plugin/plugin.json` inline `mcpServers`.
-
-Skill for registries: `skills/novence-deploy` (`gh skill install Novence-ai/mcp novence-deploy` when available).
-
 ## Install (Claude Code)
 
 ```bash
@@ -38,7 +34,7 @@ Claude stores the key via **plugin `userConfig`**. Empty interpolation is treate
 
 ## Cursor / shell
 
-Root `.mcp.json` matches this URL-only shape (no auth header). Connect with no header, then bootstrap:
+Connect with no header, then bootstrap:
 
 ```json
 {
@@ -91,7 +87,7 @@ Verify the emailed OTP after the live URL to unlock full Free quotas.
 | Tool | Description |
 | --- | --- |
 | `bootstrap` / `verify_email` / `resend_verification` / `reissue_key` | Signup without a prior `nv_` key; OTP after live URL |
-| `create_project` / `list_projects` / `get_project` / `update_project_settings` | Project lifecycle (optional `share_gate_emails` OTP on `*.novence.ai` only) |
+| `create_project` / `list_projects` / `get_project` / `update_project_settings` | Project lifecycle (`share_gate_emails` OTP on `*.novence.ai` only; `site_mcp` visitor MCP on Pro/Scale) |
 | `get_upload_url` / `get_upload_urls_batch` / `confirm_upload` / `confirm_uploads_batch` | Upload site files |
 | `list_files` / `get_file` / `delete_file` | Manage project files |
 | `set_redirects` | Stage `/_redirects` (SPA: `/* /index.html 200`); call `deploy` to apply |

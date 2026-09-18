@@ -11,7 +11,7 @@
       "name": "novence",
       "source": "./",
       "description": "Hosted MCP for creating, checking, deploying, and hosting static sites and HTML artifacts.",
-      "version": "0.1.4"
+      "version": "0.1.3"
     }
   ]
 }
