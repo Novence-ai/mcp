@@ -87,11 +87,12 @@ Verify the emailed OTP after the live URL to unlock full Free quotas.
 | Tool | Description |
 | --- | --- |
 | `bootstrap` / `verify_email` / `resend_verification` / `reissue_key` | Signup without a prior `nv_` key; OTP after live URL |
-| `create_project` / `list_projects` / `get_project` / `update_project_settings` | Project lifecycle (`share_gate_emails` OTP on `*.novence.ai` only; `site_mcp` visitor MCP on Pro/Scale) |
+| `create_project` / `list_projects` / `get_project` / `update_project_settings` | Project lifecycle (`share_gate_emails` OTP on `*.novence.ai` only; `site_mcp` visitor MCP on Pro/Scale; `data_edit_emails` + `data_edit_names` owner `/edit` on Pro/Scale) |
 | `get_upload_url` / `get_upload_urls_batch` / `confirm_upload` / `confirm_uploads_batch` | Upload site files |
 | `list_files` / `get_file` / `delete_file` | Manage project files |
 | `set_redirects` | Stage `/_redirects` (SPA: `/* /index.html 200`); call `deploy` to apply |
 | `put_site_data` | Live `/data/{name}.json` without a deploy (Pro/Scale) |
+| `get_site_brief` / `put_site_brief` / `list_site_events` | Private webmaster brief + inbox (Pro/Scale). Session start: get then list. |
 | `deploy` / `get_deployment_status` / `get_preview_url` / `rollback` | Publish, poll, preview aliases (Pro/Scale), rollback last 5 |
 | `publish_html` | One HTML document → `index.html` + deploy (omit project_id to create) |
 | `run_checks` / `get_checks_results` | Quality checks (Lighthouse, a11y, links) |
@@ -104,6 +105,7 @@ Verify the emailed OTP after the live URL to unlock full Free quotas.
 ## Official registry
 
 Published as `ai.novence/mcp` on [registry.modelcontextprotocol.io](https://registry.modelcontextprotocol.io).
+[![MCP Badge](https://lobehub.com/badge/mcp/novence-ai-mcp)](https://lobehub.com/mcp/novence-ai-mcp)
 
 ## License
 

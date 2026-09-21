@@ -1,5 +1,5 @@
 /** Public tool catalog for directory introspection. No API internals. */
-export const catalogVersion = "0.1.3";
+export const catalogVersion = "0.1.4";
 
 const emptyObject = { type: "object", properties: {} };
 
@@ -267,7 +267,7 @@ export const tools = [
     name: "update_project_settings",
     title: "Update project settings",
     description:
-      "Update project name, description, check thresholds, analyticsEnabled (cookieless edge traffic; off by default), shareGateEmails (optional OTP gate on platform hosts only; empty = public), or siteMcp (off | read | forms visitor MCP on Pro/Scale; cannot combine with the share gate).",
+      "Update project name, description, check thresholds, analyticsEnabled (cookieless edge traffic; off by default), shareGateEmails (optional OTP gate on platform hosts only; empty = public), siteMcp (off | read | forms visitor MCP on Pro/Scale; cannot combine with the share gate), or owner-edit (data_edit_emails + data_edit_names, optional data_edit_path; Pro/Scale, off by default).",
     annotations: write,
     inputSchema: {
       type: "object",
@@ -301,6 +301,25 @@ export const tools = [
           enum: ["off", "read", "forms"],
           description:
             "Visitor Site MCP. off (default), read (list_pages + get_site_data), or forms (also list_forms + submit_form). Pro/Scale. Cannot enable while share_gate_emails is set.",
+        },
+        data_edit_emails: {
+          type: "array",
+          maxItems: 5,
+          items: { type: "string" },
+          description:
+            "Up to 5 owner emails for live /edit (OTP). Empty turns owner-edit off. Pro/Scale. Custom domains included. Requires data_edit_names.",
+        },
+        data_edit_names: {
+          type: "array",
+          maxItems: 5,
+          items: { type: "string" },
+          description:
+            "1–5 collection names the owner may edit (e.g. menu, hours). Required when data_edit_emails is set.",
+        },
+        data_edit_path: {
+          type: "string",
+          description:
+            "Single path segment for the editor (default edit → /edit). Letters, digits, hyphen.",
         },
       },
       required: ["project_id"],
@@ -470,6 +489,58 @@ export const tools = [
         },
       },
       required: ["project_id", "name", "json"],
+    },
+  },
+  {
+    name: "get_site_brief",
+    title: "Get site brief",
+    description:
+      "Private webmaster brief for this project (Pro/Scale). Markdown or JSON, max 64 KB. Not on the live origin. On session start call this then list_site_events. Empty is brief: null. Read-only.",
+    annotations: read,
+    inputSchema: {
+      type: "object",
+      properties: { project_id: projectId() },
+      required: ["project_id"],
+    },
+  },
+  {
+    name: "put_site_brief",
+    title: "Put site brief",
+    description:
+      "Write the private webmaster brief (Pro/Scale, max 64 KB). What the site is, which /data files matter, form ids, owner email, what not to touch. Empty string clears it. Survives deploys.",
+    annotations: write,
+    inputSchema: {
+      type: "object",
+      properties: {
+        project_id: projectId(),
+        brief: {
+          type: "string",
+          description: "Markdown or JSON. Empty string clears the brief.",
+        },
+      },
+      required: ["project_id", "brief"],
+    },
+  },
+  {
+    name: "list_site_events",
+    title: "List site events",
+    description:
+      "Webmaster inbox (Pro/Scale): form.submitted, collection.updated (agent vs owner_edit), check.completed, deploy.live. Default last 7 days, max 100. Pass since from the last session. Forms still email the owner. Read-only.",
+    annotations: read,
+    inputSchema: {
+      type: "object",
+      properties: {
+        project_id: projectId(),
+        since: {
+          type: "string",
+          description: "ISO timestamp; only events after this. Optional; default 7 days ago.",
+        },
+        limit: {
+          type: "integer",
+          description: "Max rows (1–100). Optional; default 50.",
+        },
+      },
+      required: ["project_id"],
     },
   },
   {
