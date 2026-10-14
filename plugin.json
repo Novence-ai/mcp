@@ -1,0 +1,15 @@
+{
+  "$schema": "https://agent-plugins.org/schemas/1.0.0/plugin.schema.json",
+  "name": "novence",
+  "version": "0.1.4",
+  "description": "Hosted MCP for creating, checking, deploying, and hosting static sites and HTML artifacts.",
+  "author": {
+    "name": "Novence",
+    "email": "support@novence.ai",
+    "url": "https://novence.ai"
+  },
+  "homepage": "https://novence.ai/mcp",
+  "repository": "https://github.com/Novence-ai/mcp",
+  "license": "MIT",
+  "keywords": ["mcp", "deploy", "static-sites", "hosting"]
+}
