@@ -145,7 +145,7 @@ export const tools = [
     name: "reissue_key",
     title: "Reissue API key",
     description:
-      "Mint a new account nv_ key from email OTP. No Bearer key required. WARNING: revokes prior account-scoped nv_ keys. Also verifies email if needed.",
+      "Mint a new primary account nv_ key from email OTP. No Bearer key required. WARNING: revokes the previous primary account key; named keys (create_api_key) keep working unless revoke_all is true. Also verifies email if needed.",
     annotations: destroy,
     inputSchema: {
       type: "object",
@@ -154,6 +154,10 @@ export const tools = [
         code: {
           type: "string",
           description: "OTP from resend_verification or the latest verification email.",
+        },
+        revoke_all: {
+          type: "boolean",
+          description: "Also revoke every named key. Use when a key may have leaked. Default false.",
         },
       },
       required: ["email", "code"],
@@ -282,7 +286,7 @@ export const tools = [
           type: "object",
           additionalProperties: true,
           description:
-            "Quality-check threshold overrides. Omit to leave unchanged.",
+            "Quality-check threshold overrides: lighthousePerformance (50), lighthouseAccessibility (80), maxCriticalAxeViolations (0), allowBrokenInternalLinks (false), enforcePerformance (false — low performance only warns). Omit to leave unchanged.",
         },
         analytics_enabled: {
           type: "boolean",
@@ -576,7 +580,7 @@ export const tools = [
     name: "deploy",
     title: "Deploy site",
     description:
-      "Publish the site. Verified accounts run quality checks; unverified accounts skip checks (checkRuns: 0) and still go live. POST returns quickly — poll get_deployment_status until live or failed. Do not retry POST while status is promoting or checking.",
+      "Publish the site. Verified accounts run quality checks; unverified accounts skip checks (checkRuns: 0) and still go live. POST returns quickly — poll get_deployment_status until live or failed. Do not retry POST while status is queued, checking, or promoting.",
     annotations: writeWorld,
     inputSchema: {
       type: "object",
@@ -595,7 +599,7 @@ export const tools = [
     name: "get_deployment_status",
     title: "Get deployment status",
     description:
-      "Poll publish state after deploy (queued, checking, promoting, live, failed). Omit deployment_id for the latest. Use get_checks_results for Lighthouse/a11y scores and get_preview_url once live. Read-only; do not retry deploy while promoting or checking.",
+      "Poll publish state after deploy (queued, checking, promoting, live, failed). queued = waiting for a check runner (queuePosition shows your place); wait recommendedPollSeconds between polls. Omit deployment_id for the latest. Use get_checks_results for Lighthouse/a11y scores and get_preview_url once live. Read-only; do not retry deploy while queued, checking, or promoting.",
     annotations: read,
     inputSchema: {
       type: "object",
@@ -880,10 +884,34 @@ export const tools = [
     inputSchema: emptyObject,
   },
   {
+    name: "create_api_key",
+    title: "Create named API key",
+    description:
+      "Mint an extra labelled nv_ key (e.g. ci, laptop) that keeps working when reissue_key replaces the primary key. Max 10 named keys; cannot exceed the calling key's permissions; the owner is emailed. The key is shown once — tell the user to save it.",
+    annotations: write,
+    inputSchema: {
+      type: "object",
+      properties: {
+        name: {
+          type: "string",
+          minLength: 1,
+          maxLength: 64,
+          description: "Label, e.g. ci or laptop. Letters, digits, spaces, . _ -",
+        },
+        project_id: {
+          type: "string",
+          format: "uuid",
+          description: "Restrict the key to one project. Omit for an account key (account keys only).",
+        },
+      },
+      required: ["name"],
+    },
+  },
+  {
     name: "get_account_console_kit",
     title: "Get account console kit",
     description:
-      "JSON kit to write a local novence-console.html: snapshot, HTML template, session mint instructions. Serve on localhost. Use create_account_session for the mgmt_ token; use get_account for JSON without the kit. Read-only.",
+      "JSON kit to write a local novence-console.html: snapshot, HTML template (replace the /*NOVENCE_INJECT*/ marker), and session. With an nv_ key, session.token is a fresh 30-minute mgmt_ token — do not log it. Humans can instead run `npx novence dashboard`. Serve on the first free 127.0.0.1 port (never assume 8765). Use get_account for JSON without the kit.",
     annotations: read,
     inputSchema: emptyObject,
   },
