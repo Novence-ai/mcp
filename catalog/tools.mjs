@@ -330,6 +330,25 @@ export const tools = [
     },
   },
   {
+    name: "delete_project",
+    title: "Delete project",
+    description:
+      "IRREVERSIBLE. Permanently delete a hosting project: the live site, preview URLs, and custom domain stop serving (HTTP 410), every deployed and staged file is erased, forms stop accepting submissions, site MCP and owner-edit go away, and project-scoped API keys and pending invites are revoked. There is no undo and no restore. Owner only. Only call this when the human has explicitly asked to delete this specific project; never to clean up after a failed deploy or to start over (redeploy instead). confirm must equal the project's exact name or suffix — get it from get_project and read it back to the human first. Calling again on a deleted project returns alreadyDeleted=true.",
+    annotations: { ...destroy, idempotentHint: true },
+    inputSchema: {
+      type: "object",
+      properties: {
+        project_id: projectId(),
+        confirm: {
+          type: "string",
+          description:
+            "The project's exact name or suffix (from get_project), typed back as confirmation. A mismatch refuses the delete.",
+        },
+      },
+      required: ["project_id", "confirm"],
+    },
+  },
+  {
     name: "get_upload_url",
     title: "Get upload URL",
     description:

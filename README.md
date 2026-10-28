@@ -92,6 +92,7 @@ Verify the emailed OTP after the live URL to unlock full Free quotas.
 | --- | --- |
 | `bootstrap` / `verify_email` / `resend_verification` / `reissue_key` | Signup without a prior `nv_` key; OTP after live URL |
 | `create_project` / `list_projects` / `get_project` / `update_project_settings` | Project lifecycle (`share_gate_emails` OTP on `*.novence.ai` only; `site_mcp` visitor MCP on Pro/Scale; `data_edit_emails` + `data_edit_names` owner `/edit` on Pro/Scale) |
+| `delete_project` | Irreversible owner-only delete; `confirm` must be the project's exact name or suffix |
 | `get_upload_url` / `get_upload_urls_batch` / `confirm_upload` / `confirm_uploads_batch` | Upload site files |
 | `list_files` / `get_file` / `delete_file` | Manage project files |
 | `set_redirects` | Stage `/_redirects` (SPA: `/* /index.html 200`); call `deploy` to apply |
