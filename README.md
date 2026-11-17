@@ -104,6 +104,7 @@ Verify the emailed OTP after the live URL to unlock full Free quotas.
 | `configure_custom_domain` / `get_domain_status` | Custom domains (CNAME www → fallback.novence.ai; apex ALIAS **or** URL-redirect) |
 | `create_form` / `list_forms` / `update_form` / `list_form_submissions` / `delete_form_submission` | Forms |
 | `checkout` / `mpp_upgrade` / `billing_portal` | Paid plans (verified email; after 2nd project or a 402) |
+| `get_spend_limit` / `set_spend_limit` | Monthly overage cap; at the cap, overage pauses until raised or the month resets |
 | `get_quotas_and_usage` / `get_project_usage` / `update_project_settings` (`analytics_enabled`) / `get_project_analytics` / `get_account` | Quotas, usage, and opt-in site traffic |
 | `create_account_session` / `get_account_console_kit` | Billing/account console kit (never embed `nv_` in HTML) |
 

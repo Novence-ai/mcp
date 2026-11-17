@@ -230,6 +230,33 @@ export const tools = [
     },
   },
   {
+    name: "get_spend_limit",
+    title: "Get spend limit",
+    description:
+      "Monthly overage cap (Pro/Scale): the limit, month-to-date overage at list rates, and what is paused. Overage excludes the plan's base price. Read-only.",
+    annotations: read,
+    inputSchema: emptyObject,
+  },
+  {
+    name: "set_spend_limit",
+    title: "Set spend limit",
+    description:
+      "Set, change, or remove the account's monthly overage cap in USD (Pro/Scale). At the cap, anything that would add overage pauses — live sites once bandwidth is past the included pool, deploy checks, form submissions, new custom domains — and nothing more is billed, until the cap is raised or the UTC month resets. 0 = never pay overage; null removes the cap. Only change it when the account owner asks.",
+    annotations: write,
+    inputSchema: {
+      type: "object",
+      properties: {
+        limit_usd: {
+          type: ["number", "null"],
+          minimum: 0,
+          maximum: 100000,
+          description: "Monthly overage cap in USD (up to 2 decimals). null removes the cap.",
+        },
+      },
+      required: ["limit_usd"],
+    },
+  },
+  {
     name: "create_project",
     title: "Create project",
     description:
