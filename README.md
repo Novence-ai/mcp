@@ -99,6 +99,7 @@ Verify the emailed OTP after the live URL to unlock full Free quotas.
 | `put_site_data` | Live `/data/{name}.json` without a deploy (Pro/Scale) |
 | `get_site_brief` / `put_site_brief` / `list_site_events` | Private webmaster brief + inbox (Pro/Scale). Session start: get then list. |
 | `deploy` / `get_deployment_status` / `get_preview_url` / `rollback` | Publish, poll, preview aliases (Pro/Scale), rollback last 5 |
+| `connect_github_repo` / `disconnect_github_repo` | Optional push-to-deploy from a GitHub repo via GitHub Actions; no API key stored in the repo |
 | `publish_html` | One HTML document → `index.html` + deploy (omit project_id to create) |
 | `run_checks` / `get_checks_results` | Quality checks (Lighthouse, a11y, links) |
 | `configure_custom_domain` / `get_domain_status` | Custom domains (CNAME www → fallback.novence.ai; apex ALIAS **or** URL-redirect) |
