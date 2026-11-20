@@ -1,5 +1,5 @@
 /** Public tool catalog for directory introspection. No API internals. */
-export const catalogVersion = "0.1.4";
+export const catalogVersion = "0.1.5";
 
 const emptyObject = { type: "object", properties: {} };
 
@@ -93,6 +93,39 @@ const destroy = {
   idempotentHint: false,
   openWorldHint: false,
 };
+
+const formEmail = {
+  type: ["object", "null"],
+  description:
+    "Notification email look, for the client who receives it. Omitted keys stay as they are; null clears a key; email=null resets to the plain default.",
+  properties: {
+    from_name: { type: ["string", "null"], description: "Sender display name. Default: the project name." },
+    from_address: {
+      type: ["string", "null"],
+      description:
+        "Send from this address on a verified sending domain (Pro/Scale; see add_sending_domain). Default: Novence's notifications address.",
+    },
+    subject: {
+      type: ["string", "null"],
+      description: "Subject template, e.g. 'New enquiry from {name}'. {field}, {form} and {site} are filled in.",
+    },
+    intro: { type: ["string", "null"], description: "Short plain-text line above the fields; same placeholders." },
+    accent_color: { type: ["string", "null"], description: "#rrggbb for links and the top bar." },
+    logo_url: { type: ["string", "null"], description: "https:// logo shown at the top, 40px tall." },
+    hide_credit: {
+      type: ["boolean", "null"],
+      description: "true removes the 'Form delivery by Novence' footer line (Pro/Scale).",
+    },
+  },
+};
+
+function sendingDomainId() {
+  return {
+    type: "string",
+    format: "uuid",
+    description: "Sending domain id from add_sending_domain or list_sending_domains.",
+  };
+}
 
 export const tools = [
   {
@@ -760,6 +793,7 @@ export const tools = [
           type: "string",
           description: "Hidden field name used as a spam honeypot. Optional.",
         },
+        email: formEmail,
       },
       required: ["project_id", "name"],
     },
@@ -780,7 +814,7 @@ export const tools = [
     name: "update_form",
     title: "Update form",
     description:
-      "Patch an existing Novence form (name, slug, fields, notify_email, honeypot, active|disabled). Partial update: omitted fields stay unchanged. Use create_form for a new form; use list_forms to get form_id. Does not delete submissions.",
+      "Patch an existing Novence form (name, slug, fields, notify_email, email look, honeypot, active|disabled). Partial update: omitted fields stay unchanged. Use create_form for a new form; use list_forms to get form_id. Does not delete submissions.",
     annotations: write,
     inputSchema: {
       type: "object",
@@ -808,6 +842,7 @@ export const tools = [
           type: "string",
           description: "Spam honeypot field name. Omit to leave unchanged.",
         },
+        email: formEmail,
         status: {
           type: "string",
           enum: ["active", "disabled"],
@@ -869,6 +904,67 @@ export const tools = [
         },
       },
       required: ["project_id", "form_id", "submission_id"],
+    },
+  },
+  {
+    name: "add_sending_domain",
+    title: "Add sending domain",
+    description:
+      "Register your own domain so form notification email can come from it (e.g. forms@yourdomain.com) instead of Novence's address. Pro/Scale. Returns DNS records (DKIM, SPF) to add at the domain's DNS host; then call verify_sending_domain. Idempotent for a domain you already added.",
+    annotations: { ...writeWorld, idempotentHint: true },
+    inputSchema: {
+      type: "object",
+      properties: {
+        domain: {
+          type: "string",
+          description: "Domain you control, e.g. acmebakery.com or mail.acmebakery.com.",
+        },
+      },
+      required: ["domain"],
+    },
+  },
+  {
+    name: "list_sending_domains",
+    title: "List sending domains",
+    description:
+      "List this account's sending domains with their stored status and DNS records. Use get_sending_domain for a live status check. Read-only.",
+    annotations: read,
+    inputSchema: emptyObject,
+  },
+  {
+    name: "get_sending_domain",
+    title: "Get sending domain",
+    description:
+      "Live status of one sending domain and its DNS records (each with its own status). Read-only.",
+    annotations: { ...read, openWorldHint: true },
+    inputSchema: {
+      type: "object",
+      properties: { sending_domain_id: sendingDomainId() },
+      required: ["sending_domain_id"],
+    },
+  },
+  {
+    name: "verify_sending_domain",
+    title: "Verify sending domain",
+    description:
+      "Ask the email provider to check a sending domain's DNS records now. The check runs in the background: call get_sending_domain after a minute or two. Once verified, set a form's email.from_address with update_form.",
+    annotations: { ...writeWorld, idempotentHint: true },
+    inputSchema: {
+      type: "object",
+      properties: { sending_domain_id: sendingDomainId() },
+      required: ["sending_domain_id"],
+    },
+  },
+  {
+    name: "remove_sending_domain",
+    title: "Remove sending domain",
+    description:
+      "Remove a sending domain. Forms that sent from it go back to Novence's default address. The DNS records can then be deleted at the DNS host.",
+    annotations: { ...destroy, openWorldHint: true },
+    inputSchema: {
+      type: "object",
+      properties: { sending_domain_id: sendingDomainId() },
+      required: ["sending_domain_id"],
     },
   },
   {
